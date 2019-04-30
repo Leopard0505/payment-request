@@ -1,5 +1,5 @@
 import test from 'ava'
-import paymentRequest from '../src/paymentRequest'
+import paymentRequest from '../index'
 
 test('paymentRequest#new', t => {
   const params = {
