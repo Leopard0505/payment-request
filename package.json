@@ -1,6 +1,6 @@
 {
   "name": "@leopard0505/payment-request",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "payment request api",
   "main": "index.js",
   "scripts": {
