@@ -4,9 +4,11 @@
  * 　支払いができる
  */
 module.exports = class {
-  constructor(params) {
+  constructor(params, displayItems) {
+    if (!displayItems) throw new Error('found not displayItems')
+
     // API URL
-    this.URL = params.URL || '/pay'
+    this.URL = params.URL ? params.URL : '/pay'
 
     // Supported payment methods
     this.supportedInstruments = [
@@ -25,23 +27,31 @@ module.exports = class {
         }
       }
     ]
+
+    this.currency = params.currency ? params.currency : 'JPY'
     // Checkout details
     this.details = {
-      displayItems: [
-        {
-          label: 'Original donation amount',
-          amount: { currency: 'USD', value: '65.00' }
-        },
-        {
-          label: 'Friends and family discount',
-          amount: { currency: 'USD', value: '-10.00' }
-        }
-      ],
-      total: {
-        label: 'Total',
-        amount: { currency: 'USD', value: '55.00' }
-      }
+      displayItems: displayItems,
+      total: this.calculation(displayItems)
     }
+  }
+
+  /** calculation */
+  calculation(items) {
+    const total = {
+      label: 'Total',
+      amount: { currency: this.currency, value: '0.00' }
+    }
+    
+    const values = items.map(p => {
+      return parseInt(p.amount.value)
+    })
+
+    const value = values.reduce((prev, current) => prev + current)
+    
+    total.amount.value = value
+
+    return total
   }
 
   /** process pyament request */
@@ -59,8 +69,9 @@ module.exports = class {
 
     // 2. Show the native UI with `.show()`
     // 2. `.show()` を呼び出して、ネイティブ UI を表示する
-    const result = await request.show()
-
+    const result = await request.show().catch(error => { console.error('await/catch', error.message); return })
+    if (!result) return
+    
     // 3. Process the payment
     // 3. 決済処理をおこなう
     // POST the payment information to the server
@@ -80,9 +91,11 @@ module.exports = class {
         return result.complete('success')
       } else {
         // Payment failure
+        console.error('status: ', response.status)
         return result.complete('fail')
       }
-    } catch (e) {
+    } catch (error) {
+      console.error('try/catch', error.message)
       return result.complete('fail')
     }
   }
