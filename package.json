@@ -1,5 +1,5 @@
 {
-  "name": "payment-request",
+  "name": "@leopard0505/payment-request",
   "version": "0.0.1",
   "description": "payment request api",
   "main": "index.js",
@@ -11,6 +11,7 @@
     "url": "git+https://github.com/Leopard0505/payment-request.git"
   },
   "keywords": [
+    "leopard0505",
     "payment-request",
     "PaymentRequestAPI"
   ],
