@@ -11,22 +11,36 @@ Import this module in your source code and call like below.
 ```JavaScript
 import paymentRequest from '@leopard0505/payment-request'
 
-const payment = new paymentRequest()
+const payment = new paymentRequest(displayItems)
+payment.pay().then(/* ... */).catch(/* ... */)
 ```
 or
 ```JavaScript
 import paymentRequest from '@leopard0505/payment-request'
 
 const params = { /* ... */ }
-const payment = new paymentRequest(params)
+const payment = new paymentRequest(params, displayItems)
+payment.pay().then(/* ... */).catch(/* ... */)
 ```
 
-## params
+## args
 default
 ```JavaScript
 const params = {
-  URL: 'pay'
+  URL: 'pay',
+  currency: 'JPY'
 }
+
+const displayItems = [
+  {
+    label: 'Original donation amount',
+    amount: { currency: 'JPY', value: '65.00' }
+  },
+  {
+    label: 'Friends and family discount',
+    amount: { currency: 'JPY', value: '-10.00' }
+  }
+]
 ```
 
 
