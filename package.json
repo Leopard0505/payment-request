@@ -1,0 +1,27 @@
+{
+  "name": "payment-request",
+  "version": "0.0.1",
+  "description": "payment request api",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leopard0505/payment-request.git"
+  },
+  "keywords": [
+    "payment-request",
+    "PaymentRequestAPI"
+  ],
+  "author": "Leopard0505",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Leopard0505/payment-request/issues"
+  },
+  "homepage": "https://github.com/Leopard0505/payment-request#readme",
+  "devDependencies": {
+    "ava": "^1.4.1",
+    "sinon": "^7.3.2"
+  }
+}
