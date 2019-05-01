@@ -1,6 +1,6 @@
 {
   "name": "@leopard0505/payment-request",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "payment request api",
   "main": "index.js",
   "scripts": {
@@ -24,5 +24,8 @@
   "devDependencies": {
     "ava": "^1.4.1",
     "sinon": "^7.3.2"
+  },
+  "dependencies": {
+    "stripe-client": "^1.1.5"
   }
 }
