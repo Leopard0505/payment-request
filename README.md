@@ -28,7 +28,8 @@ default
 ```JavaScript
 const params = {
   URL: 'pay',
-  currency: 'JPY'
+  currency: 'JPY',
+  PUBLISHABLE_STRIPE_API_KEY: 'YOUR_PUBLISHABLE_STRIPE_API_KEY'
 }
 
 const displayItems = [
