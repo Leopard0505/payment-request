@@ -7,8 +7,11 @@ module.exports = class {
   constructor(params, displayItems) {
     if (!displayItems) throw new Error('found not displayItems')
 
-    // API URL
+    // params
     this.URL = params.URL ? params.URL : '/pay'
+    this.currency = params.currency ? params.currency : 'JPY'
+    // Stripe PK Key
+    this.PUBLISHABLE_STRIPE_API_KEY = params.stripe_pk_key ? params.stripe_pk_key : null
 
     // Supported payment methods
     this.supportedInstruments = [
@@ -28,7 +31,6 @@ module.exports = class {
       }
     ]
 
-    this.currency = params.currency ? params.currency : 'JPY'
     // Checkout details
     this.details = {
       displayItems: displayItems,
@@ -71,6 +73,31 @@ module.exports = class {
     // 2. `.show()` を呼び出して、ネイティブ UI を表示する
     const result = await request.show().catch(error => { console.error('await/catch', error.message); return })
     if (!result) return
+
+    const body = {
+      amount: this.details.total,
+      currency: this.currency,
+      source: null
+    }
+    if (this.PUBLISHABLE_STRIPE_API_KEY) {
+      // Stripe initialized and Stripe createToken
+      const stripe = require('stripe-client')(this.PUBLISHABLE_STRIPE_API_KEY)
+
+      const information = {
+        card: {
+          number: result.details.cardNumber,
+          exp_month: result.details.expiryMonth,
+          exp_year: result.details.expiryYear,
+          cvc: result.details.cardSecurityCody,
+          name: resuld.detais.cardholderName
+        }
+      }
+
+      const card = await stripe.createToken(information)
+      const token = card.id
+
+      body.source = token
+    }
     
     // 3. Process the payment
     // 3. 決済処理をおこなう
@@ -82,7 +109,7 @@ module.exports = class {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(result.toJSON())
+        body: JSON.stringify(body)
       })
       // 4. Display payment results
       // 4. 決済結果を表示する
