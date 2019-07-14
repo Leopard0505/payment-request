@@ -2,9 +2,8 @@
   "name": "@leopard0505/payment-request",
   "version": "0.1.0",
   "description": "payment request api",
-  "main": "index.js",
   "scripts": {
-    "test": "ava -v"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -22,8 +21,10 @@
   },
   "homepage": "https://github.com/Leopard0505/payment-request#readme",
   "devDependencies": {
-    "ava": "^1.4.1",
-    "sinon": "^7.3.2"
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0"
   },
   "dependencies": {
     "stripe-client": "^1.1.5"
