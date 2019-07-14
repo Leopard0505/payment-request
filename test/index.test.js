@@ -1,4 +1,4 @@
-import PaymentRequestMethod from '../index'
+import PaymentRequestMethod from '../src/client/index'
 
 const params = {
   url: '/pay',
@@ -33,4 +33,12 @@ describe('PaymentRequestMethod', () => {
       expect(amount.value).toBe(800)
     })
   })
+  
+  // describe('isPaymentRequest()', () => {
+  //   test('isPaymentRequest()', () => {
+  //     expect(payment.isPaymentRequest()).toBe(true)
+  //   })
+  // })
+
+  // describe('')
 })
