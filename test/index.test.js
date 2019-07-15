@@ -7,14 +7,22 @@ const params = {
 const displayItems = [
   {
     label: 'First Item',
-    amount: { currency: 'JPY', value: '1000' }
+    amount: { currency: 'JPY', value: 1000 }
   },
   {
     label: 'Second Item',
-    amount: { currency: 'JPY', value: '-200' }
+    amount: { currency: 'JPY', value: -200 }
   }
 ]
-
+const selectedOption = {
+  id: 'economy',
+  label: 'Economy Shipping (5-7 Days)',
+  selected: true,
+  amount: {
+    currency: 'JPY',
+    value: 0,
+  }
+}
 describe('PaymentRequestMethod', () => {
   const payment = new PaymentRequestMethod(params, displayItems)
   describe('constructor()', () => {
@@ -24,8 +32,25 @@ describe('PaymentRequestMethod', () => {
     })
   })
 
+  describe('validateAmount()', () => {
+    const displayItems = [
+      {
+        label: 'First Item',
+        amount: { currency: 'JPY', value: 'aadsf' }
+      },
+      {
+        label: 'Second Item',
+        amount: { currency: 'JPY', value: -200 }
+      }
+    ]
+    const errorMessage = payment.validateAmount(displayItems)
+    it('TypeError()', () => {
+      expect(errorMessage).toBe('金額を10進数にしてください')
+    })
+  })
+
   describe('calculation()', () => {
-    const { amount } = payment.calculation(displayItems)
+    const { amount } = payment.calculation(displayItems, selectedOption)
     test('amount#currency', () => {
       expect(amount.currency).toBe('JPY')
     })
