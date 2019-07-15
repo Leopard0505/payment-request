@@ -27,19 +27,19 @@ payment.pay().then(/* ... */).catch(/* ... */)
 default
 ```JavaScript
 const params = {
-  URL: 'pay',
+  url: 'pay',
   currency: 'JPY',
-  PUBLISHABLE_STRIPE_API_KEY: 'YOUR_PUBLISHABLE_STRIPE_API_KEY'
+  stripe_pk_key: 'YOUR_PUBLISHABLE_STRIPE_API_KEY'
 }
 
 const displayItems = [
   {
     label: 'Original donation amount',
-    amount: { currency: 'JPY', value: '65.00' }
+    amount: { currency: 'JPY', value: '1080' }
   },
   {
     label: 'Friends and family discount',
-    amount: { currency: 'JPY', value: '-10.00' }
+    amount: { currency: 'JPY', value: '-108' }
   }
 ]
 ```
