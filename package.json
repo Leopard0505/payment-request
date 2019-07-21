@@ -4,7 +4,9 @@
   "description": "payment request api",
   "scripts": {
     "test": "jest",
-    "start": "node src/server/index.js"
+    "dev": "webpack --mode development --watch",
+    "build": "webpack --mode production",
+    "server": "node server/index.js"
   },
   "repository": {
     "type": "git",
@@ -22,12 +24,23 @@
   },
   "homepage": "https://github.com/Leopard0505/payment-request#readme",
   "devDependencies": {
-    "@babel/core": "^7.5.4",
-    "@babel/preset-env": "^7.5.4",
-    "babel-jest": "^24.8.0",
+    "@babel/core": "^7.5.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "babel-eslint": "^10.0.2",
+    "babel-loader": "^8.0.6",
+    "body-parser": "^1.19.0",
     "consola": "^2.9.0",
+    "css-loader": "^3.1.0",
+    "eslint": "^6.0.1",
+    "eslint-loader": "^2.2.1",
     "express": "^4.17.1",
-    "jest": "^24.8.0"
+    "jest": "^24.8.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6"
   },
   "dependencies": {
     "stripe-client": "^1.1.5"

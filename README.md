@@ -6,20 +6,24 @@ First, install this module in your project.
 ```console
 $ npm install @leopard0505/payment-request
 ```
+or
+```console
+$ yarn add @leopard0505/payment-request
+```
 
 Import this module in your source code and call like below.
 ```JavaScript
-import paymentRequest from '@leopard0505/payment-request'
+import PaymentRequestMethod from '@leopard0505/payment-request'
 
-const payment = new paymentRequest(displayItems)
+const payment = new PaymentRequestMethod(displayItems)
 payment.pay().then(/* ... */).catch(/* ... */)
 ```
 or
 ```JavaScript
-import paymentRequest from '@leopard0505/payment-request'
+import PaymentRequestMethod from '@leopard0505/payment-request'
 
 const params = { /* ... */ }
-const payment = new paymentRequest(params, displayItems)
+const payment = new PaymentRequestMethod(params, displayItems)
 payment.pay().then(/* ... */).catch(/* ... */)
 ```
 
@@ -42,6 +46,24 @@ const displayItems = [
     amount: { currency: 'JPY', value: '-108' }
   }
 ]
+```
+
+## local
+ローカルで実行する場合はコンソールを2つ用意する
+以下のコマンドを実行する
+
+ファイル変更を検知してwebpackでバンドルする
+```bash
+$ yarn dev
+```
+ローカルサーバーを起動する
+```bash
+$ yarn server
+```
+
+## Test
+```bash
+$ yarn test
 ```
 
 

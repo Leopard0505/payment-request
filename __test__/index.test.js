@@ -1,4 +1,4 @@
-import PaymentRequestMethod from '../src/client/index'
+import PaymentRequestMethod from '../src/js/index'
 
 const params = {
   url: '/pay',

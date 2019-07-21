@@ -1,0 +1,42 @@
+html, body {
+  background-color: #f6f9fc;
+}
+main {
+  max-width: 1024px;
+  width: 100%;
+}
+.container {
+  margin: 70px auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.wrap {
+  width: 750px;
+}
+.box {
+  border-radius: 4px;
+  box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  margin-left: -20px;
+  margin-right: -20px;
+  background-color: #525f7f;
+}
+#stripe-button {
+  display: block;
+  width: calc(100% - 30px);
+  height: 40px;
+  margin: 0 15px;
+  padding: 0;
+  background-color: #fcd669;
+  border-radius: 20px;
+  color: #525f7f;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  border-style: none;
+  font-family: Quicksand, Open Sans, Segoe UI, sans-serif;
+  font-size: 16px;
+}

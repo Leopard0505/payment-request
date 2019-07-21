@@ -1,7 +1,9 @@
+import '../css/style.css'
+import Stripe from 'stripe-client'
 /**
  * 必要
- * 　商品情報
- * 　支払いができる
+ * 商品情報
+ * 支払いができる
  */
 export default class PaymentRequestMethod {
 
@@ -21,6 +23,8 @@ export default class PaymentRequestMethod {
     this.currency = params.currency ? params.currency : 'JPY'
     // Stripe PK Key
     this.stripe_pk_key = params.stripe_pk_key ? params.stripe_pk_key : null
+
+    this.stripe = new Stripe(this.stripe_pk_key)
 
     this.displayItems = displayItems
 
@@ -58,23 +62,23 @@ export default class PaymentRequestMethod {
 
     this.shippingOptions = [
       {
-        id: 'economy',
-        label: 'Economy Shipping (5-7 Days)',
-        selected: true,
+        id: 'normal',
+        label: '通常配送 (5-7日)',
+        // selected: true,
         amount: {
           currency: 'JPY',
           value: 0,
         },
       }, {
         id: 'express',
-        label: 'Express Shipping (2-3 Days)',
+        label: '速達配送 (2-3日)',
         amount: {
           currency: 'JPY',
           value: 500,
         },
       }, {
         id: 'next-day',
-        label: 'Next Day Delivery',
+        label: '翌日配達',
         amount: {
           currency: 'JPY',
           value: 1000,
@@ -82,20 +86,10 @@ export default class PaymentRequestMethod {
       },
     ]
 
-    this.selectedOption = {
-      id: 'economy',
-      label: 'Economy Shipping (5-7 Days)',
-      selected: true,
-      amount: {
-        currency: 'JPY',
-        value: 0,
-      }
-    }
-
     // Checkout details
     this.details = {
       displayItems: displayItems,
-      total: this.calculation(displayItems, this.selectedOption),
+      total: this.calculation(displayItems),
       shippingOptions: this.shippingOptions
     }
 
@@ -110,8 +104,7 @@ export default class PaymentRequestMethod {
   }
 
   /** calculation */
-  calculation(items, option) {
-    console.log(option)
+  calculation(items) {
     const total = {
       label: '合計',
       amount: { currency: this.currency, value: 0 }
@@ -121,7 +114,7 @@ export default class PaymentRequestMethod {
     .map(item => item.amount.value)
     .reduce((prev, current) => prev + current)
     
-    total.amount.value = value + option.amount.value
+    total.amount.value = value
 
     return total
   }
@@ -169,41 +162,41 @@ export default class PaymentRequestMethod {
     // 0. Add event listener on `shippingaddresschange`
     // 0.
     request.addEventListener('shippingaddresschange', ev => {
-      ev.updateWith(((details, addr) => {
-        let shippingOption = {
-          id: '',
-          label: '',
-          amount: { currency: 'JPY', value: 0 },
-          selected: true
-        }
-        // Shipping to US is supported
-        if (addr.country === 'US') {
-          shippingOption.id = 'us'
-          shippingOption.label = 'Standard shipping in US'
-          shippingOption.amount.value = 0
-          details.total.amount.value = details.total.amount.value
-        // Shipping to JP is supported
-        } else if (addr.country === 'JP') {
-          shippingOption.id = 'jp'
-          shippingOption.label = 'International shipping'
-          shippingOption.amount.value = 100
-          details.total.amount.value += 100
-        // Shipping to elsewhere is unsupported
-        } else {
-          // Empty array indicates rejection of the address
-          details.shippingOptions = []
-          return Promise.resolve(details)
-        }
-        // Hardcode for simplicity
-        if (details.displayItems.length === 2) {
-          details.displayItems[2] = shippingOption
-        } else {
-          details.displayItems.push(shippingOption)
-        }
-        details.shippingOptions = [shippingOption]
-  
+      ev.updateWith(((details) => {
+        // let shippingOption = {
+        //   id: '',
+        //   label: '',
+        //   amount: { currency: 'JPY', value: 0 },
+        //   selected: true
+        // }
+        // // Shipping to US is supported
+        // if (addr.country === 'US') {
+        //   shippingOption.id = 'us'
+        //   shippingOption.label = 'Standard shipping in US'
+        //   shippingOption.amount.value = 0
+        //   details.total.amount.value = details.total.amount.value
+        // // Shipping to JP is supported
+        // } else if (addr.country === 'JP') {
+        //   shippingOption.id = 'jp'
+        //   shippingOption.label = 'International shipping'
+        //   shippingOption.amount.value = 100
+        //   details.total.amount.value += 100
+        // // Shipping to elsewhere is unsupported
+        // } else {
+        //   // Empty array indicates rejection of the address
+        //   details.shippingOptions = []
+        //   return Promise.resolve(details)
+        // }
+        // // Hardcode for simplicity
+        // if (details.displayItems.length === 2) {
+        //   details.displayItems[2] = shippingOption
+        // } else {
+        //   details.displayItems.push(shippingOption)
+        // }
+        // details.shippingOptions = [shippingOption]
+        
         return Promise.resolve(details)
-      })(this.details, request.shippingAddress))
+      })(this.details))
     })
 
     // 0. Add event listener on `shippingoptionchange`
@@ -223,29 +216,28 @@ export default class PaymentRequestMethod {
           selectedOption = option
         }
       })
-
-      this.displayItems.push(selectedOption)
+      const newShippingOptions = this.displayItems.filter((item) => !item.id)
+      newShippingOptions.push(selectedOption)
 
       ev.updateWith({
-        displayItems: this.displayItems,
-        // total: this.calculation(this.displayItems, selectedOption),
+        displayItems: newShippingOptions,
+        total: this.calculation(newShippingOptions),
         shippingOptions: this.shippingOptions,
       })
     })
 
     // 2. Show the native UI with `.show()`
     // 2. `.show()` を呼び出して、ネイティブ UI を表示する
-    const result = await request.show().catch(() => { return false })
+    const result = await request.show().catch((err) => { console.error('PaymentRequest error: ', err); })
     if (!result) return
 
-    this.body = {
-      amount: this.details.total,
+    const body = {
+      amount: this.details.total.amount.value,
       currency: this.currency,
       source: null
     }
     if (this.stripe_pk_key) {
       // Stripe initialized and Stripe createToken
-      const stripe = require('stripe-client')(this.stripe_pk_key)
 
       const information = {
         card: {
@@ -253,14 +245,14 @@ export default class PaymentRequestMethod {
           exp_month: result.details.expiryMonth,
           exp_year: result.details.expiryYear,
           cvc: result.details.cardSecurityCody,
-          name: resuld.detais.cardholderName
+          name: result.details.cardholderName
         }
       }
 
-      const card = await stripe.createToken(information)
+      const card = await this.stripe.createToken(information).then(response => response.json())
       const token = card.id
 
-      this.body.source = token
+      body.source = token
     }
     
     // 3. Process the payment
@@ -274,8 +266,9 @@ export default class PaymentRequestMethod {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(this.body)
+        body: JSON.stringify(body)
       })
+      console.log(await response.json())
       // 4. Display payment results
       // 4. 決済結果を表示する
       status = response.ok ? 'success' : 'fail'
