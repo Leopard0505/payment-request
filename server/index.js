@@ -9,8 +9,15 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('public'))
 
-app.post('/pay', (req, res) => {
-  res.send(req.body)
+app.post('/pay', async (req, res) => {
+  try {
+    const stripe = require('stripe')('sk_xxxxxxxxxxxxxxxxx')
+    const result = await stripe.charges.create( req.body )
+    return res.send(result)
+  } catch (e) {
+    console.error(e.message)
+    return res.send(e)
+  }
 })
 
 app.listen(port, () => {

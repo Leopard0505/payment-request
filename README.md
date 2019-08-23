@@ -1,7 +1,7 @@
 # payment-request
 This is a program for payment request on client side.
 
-## usage
+## Usage
 First, install this module in your project.
 ```console
 $ npm install @leopard0505/payment-request
@@ -27,7 +27,7 @@ const payment = new PaymentRequestMethod(params, displayItems)
 payment.pay().then(/* ... */).catch(/* ... */)
 ```
 
-## args
+## Args
 default
 ```JavaScript
 const params = {
@@ -48,7 +48,7 @@ const displayItems = [
 ]
 ```
 
-## local
+## Local
 ローカルで実行する場合はコンソールを2つ用意する
 以下のコマンドを実行する
 

@@ -142,7 +142,6 @@ export default class PaymentRequestMethod {
 
   /** process pyament request */
   async pay() {
-    console.log('pay()')
     // 0. Check a `PaymentRequest` on browser
     // 0. `PaymentRequest` をブラウザで使用できるか確認する
     // if (this.isPaymentRequest()) return
@@ -151,7 +150,6 @@ export default class PaymentRequestMethod {
     // 1. Create a `PaymentRequest` instance
     // 1. `PaymentRequest` インスタンスを生成する
     const request = new PaymentRequest(this.supportedInstruments, this.details, this.options)
-    console.log('new PaymentRequest()')
 
     // 0. Check user pay using Payment Request API
     // 0. 支払い要求APIを使用してユーザーの支払いを確認する
@@ -269,6 +267,7 @@ export default class PaymentRequestMethod {
         body: JSON.stringify(body)
       })
       console.log(await response.json())
+      console.log(response)
       // 4. Display payment results
       // 4. 決済結果を表示する
       status = response.ok ? 'success' : 'fail'
@@ -276,6 +275,7 @@ export default class PaymentRequestMethod {
       console.error('try/catch', error.message)
       status = 'fail'
     }
+    console.log('complete status:', status)
     return result.complete(status)
   }
 }

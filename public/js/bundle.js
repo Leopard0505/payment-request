@@ -11288,15 +11288,13 @@ function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log('pay()'); // 0. Check a `PaymentRequest` on browser
+                // 0. Check a `PaymentRequest` on browser
                 // 0. `PaymentRequest` をブラウザで使用できるか確認する
                 // if (this.isPaymentRequest()) return
                 // console.log('isPaymentRequest()')
                 // 1. Create a `PaymentRequest` instance
                 // 1. `PaymentRequest` インスタンスを生成する
-
-                request = new PaymentRequest(this.supportedInstruments, this.details, this.options);
-                console.log('new PaymentRequest()'); // 0. Check user pay using Payment Request API
+                request = new PaymentRequest(this.supportedInstruments, this.details, this.options); // 0. Check user pay using Payment Request API
                 // 0. 支払い要求APIを使用してユーザーの支払いを確認する
                 // const supportsBasicCard = await request.canMakePayment()
                 // if (supportsBasicCard) return
@@ -11370,22 +11368,22 @@ function () {
                 }); // 2. Show the native UI with `.show()`
                 // 2. `.show()` を呼び出して、ネイティブ UI を表示する
 
-                _context.next = 7;
+                _context.next = 5;
                 return request.show()["catch"](function (err) {
                   console.error('PaymentRequest error: ', err);
                 });
 
-              case 7:
+              case 5:
                 result = _context.sent;
 
                 if (result) {
-                  _context.next = 10;
+                  _context.next = 8;
                   break;
                 }
 
                 return _context.abrupt("return");
 
-              case 10:
+              case 8:
                 body = {
                   amount: this.details.total.amount.value,
                   currency: this.currency,
@@ -11393,7 +11391,7 @@ function () {
                 };
 
                 if (!this.stripe_pk_key) {
-                  _context.next = 18;
+                  _context.next = 16;
                   break;
                 }
 
@@ -11407,23 +11405,23 @@ function () {
                     name: result.details.cardholderName
                   }
                 };
-                _context.next = 15;
+                _context.next = 13;
                 return this.stripe.createToken(information).then(function (response) {
                   return response.json();
                 });
 
-              case 15:
+              case 13:
                 card = _context.sent;
                 token = card.id;
                 body.source = token;
 
-              case 18:
+              case 16:
                 // 3. Process the payment
                 // 3. 決済処理をおこなう
                 // POST the payment information to the server
                 status = '';
-                _context.prev = 19;
-                _context.next = 22;
+                _context.prev = 17;
+                _context.next = 20;
                 return fetch("".concat(this.url), {
                   method: 'POST',
                   credentials: 'include',
@@ -11433,30 +11431,32 @@ function () {
                   body: JSON.stringify(body)
                 });
 
-              case 22:
+              case 20:
                 response = _context.sent;
                 _context.t0 = console;
-                _context.next = 26;
+                _context.next = 24;
                 return response.json();
 
-              case 26:
+              case 24:
                 _context.t1 = _context.sent;
 
                 _context.t0.log.call(_context.t0, _context.t1);
 
-                // 4. Display payment results
+                console.log(response); // 4. Display payment results
                 // 4. 決済結果を表示する
+
                 status = response.ok ? 'success' : 'fail';
-                _context.next = 35;
+                _context.next = 34;
                 break;
 
-              case 31:
-                _context.prev = 31;
-                _context.t2 = _context["catch"](19);
+              case 30:
+                _context.prev = 30;
+                _context.t2 = _context["catch"](17);
                 console.error('try/catch', _context.t2.message);
                 status = 'fail';
 
-              case 35:
+              case 34:
+                console.log('complete status:', status);
                 return _context.abrupt("return", result.complete(status));
 
               case 36:
@@ -11464,7 +11464,7 @@ function () {
                 return _context.stop();
             }
           }
-        }, _callee, this, [[19, 31]]);
+        }, _callee, this, [[17, 30]]);
       }));
 
       function pay() {

@@ -1,6 +1,6 @@
 {
   "name": "@leopard0505/payment-request",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "payment request api",
   "scripts": {
     "test": "jest",
@@ -43,6 +43,7 @@
     "webpack-cli": "^3.3.6"
   },
   "dependencies": {
+    "stripe": "^7.5.0",
     "stripe-client": "^1.1.5"
   }
 }
